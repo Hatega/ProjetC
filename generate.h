@@ -1,6 +1,9 @@
-#ifndef HEADER_FILE
-#define HEADER_FILE
+#ifndef GENERATE_FILE
+#define GENERATE_FILE
 
-void generate(char[],char[]);
+void generate(char[],char[],char[]);
+
+unsigned char *hachage(char[], char[], int, int *);
+
 
 #endif
