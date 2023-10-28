@@ -51,9 +51,13 @@ make
 ./projetc -G -i dictinnaire.txt -o condensat.txt  -a md5
 
 ./projetc -L -i condensat.txt
+
 f02368945726d5fc2a14eb576f7276c0
+
 [Ctrl+D]
 
 ./projetc -GL -i dictinnaire.txt -o condensat.txt  -a md5
+
 f02368945726d5fc2a14eb576f7276c0
+
 [Ctrl+D]
