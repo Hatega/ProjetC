@@ -21,29 +21,30 @@ void generate(char input[], char output[], char algorithm[]){
     char ligne[LEN_LIGNE]; //pour stocker une ligne du fichier
     int compteur_affichage = 0; //Compteur du nombre de hash écrit dans le fichier de sortie
     const char * separateur = "\n"; //Caractère de fin de ligne
+    int taille =0; 
+    int algo = 0; // type d'algorithme de hachage : 0-SHA256, 1-MD5, 2-SHA1
+    
+
+    //Définition algorithme à utiliser
+    if (strcmp(algorithm, "sha256") == 0) {
+        taille = SHA256_DIGEST_LENGTH;
+        algo = 0;
+    }else if(strcmp(algorithm, "md5")==0){
+        taille = MD5_DIGEST_LENGTH;
+        algo = 1;
+    }else if(strcmp(algorithm, "sha1")==0){
+        taille = SHA_DIGEST_LENGTH;
+        algo = 2;
+    }
+
+    unsigned char hash[taille]; //Déclaration de la variable qui va contenir le futur hash
+    char * strToken;
 
     //Lecture du dictionaire et génération des condensat
 	while(fgets(ligne,sizeof(ligne),f_input)!=NULL){
-        //Déclaration variable interne pour chaque ligne
-        int taille =0; 
-        int algo = 0; // type d'algorithme de hachage : 0-SHA256, 1-MD5, 2-SHA1
 
         if(ligne[0]!='\n'){ // Enleve le cas de ligne vide
-            char * strToken = strtok(ligne, separateur); // Récupère dans ligne tout les char avant le séparateur
-
-            //Définition algorithme à utiliser
-            if (strcmp(algorithm, "sha256") == 0) {
-                taille = SHA256_DIGEST_LENGTH;
-                algo = 0;
-            }else if(strcmp(algorithm, "md5")==0){
-                taille = MD5_DIGEST_LENGTH;
-                algo = 1;
-            }else if(strcmp(algorithm, "sha1")==0){
-                taille = SHA_DIGEST_LENGTH;
-                algo = 2;
-            }
-
-            unsigned char hash[taille]; //Déclaration de la variable qui va contenir le futur hash
+             strToken = strtok(ligne, separateur); // Récupère dans ligne tout les char avant le séparateur
 
             //Hachage selon l'algorithme
             switch(algo){
@@ -53,7 +54,6 @@ void generate(char input[], char output[], char algorithm[]){
                 case 2 :
                     SHA1((const unsigned char *)strToken, strlen(strToken), hash);
                     break;
-                case 0 :
                 default :
                     SHA256((const unsigned char *)strToken, strlen(strToken), hash);
                     break;

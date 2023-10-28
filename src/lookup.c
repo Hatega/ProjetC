@@ -67,7 +67,7 @@ void lookup(char input[]){
 
         //Affichage des informations
 		compteur_affichage ++;
-        if(compteur_affichage%100==0){
+        if(compteur_affichage%100000==0){
             printf("INFO Loading %d hashes...\n",compteur_affichage); //Affichage en console du nombre de condensat loader tout les 100 condensat
         }
 	}
