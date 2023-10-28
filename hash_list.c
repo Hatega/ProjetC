@@ -64,12 +64,14 @@ Hash_list * supprimer_hash(Hash_list *p, int N){
 	if(N==1){
 		Hash_list *s = p;
 		p=p->next;
+		//free(s->val);
 		free(s);
 
 	}else{
 		Hash_list *avant = pointeur_N_hash(p,N-1);
 		Hash_list *s = pointeur_N_hash(p,N);
 		avant->next = s->next;
+		//free(s->val);
 		free(s);
 	}
 	return p;
@@ -84,17 +86,9 @@ void destruct_hash(Hash_list *p){
 
 /*int main(){
 
-	int longueur = 5;
-
 	Hash_list * p = NULL;
-	p=creer_avant_hash(p,0);
-
-	for(int i=2;i<10;i++){
-		p = creer_apres(p,i);
-	}
-
-
-	p=supprimer_hash(p,1);
+	p=creer_avant_hash(p,"kec");
+	p=creer_avant_hash(p,"zhqJ");
 
 	afficher_liste_hash(p);
 

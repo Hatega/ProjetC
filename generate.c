@@ -7,60 +7,62 @@
 
 #define LEN_LIGNE 100
 
-unsigned char *hachage(char algorithm[], char ligne[], int compteur, int *taille){
-    unsigned char *hash = NULL;
-
-    if (strcmp(algorithm, "sha256") == 0) {
-        hash = (unsigned char *)malloc(SHA256_DIGEST_LENGTH);
-        if (hash) {
-            SHA256((const unsigned char *)ligne, compteur, hash);
-        }
-        *taille = SHA256_DIGEST_LENGTH;
-    }else if(strcmp(algorithm, "md5")==0){
-        hash = (unsigned char *)malloc(MD5_DIGEST_LENGTH);
-        if (hash) {
-            MD5((const unsigned char *)ligne, compteur, hash);
-        }
-        *taille = MD5_DIGEST_LENGTH;
-    }
-
-    return hash;
-}
-
 void generate(char input[], char output[], char algorithm[]){
-    FILE * fp;
-	FILE * fp2;
-    fp = fopen(input,"r");
-    fp2 = fopen(output,"w");
-    char ligne[LEN_LIGNE];
-    int compteur_affichage = 0;
-	while(fgets(ligne,sizeof(ligne),fp)!=NULL){
-        int compteur =0;
-        for(int i=0; i<LEN_LIGNE;i++){
-            if(ligne[i]=='\n'){
-                ligne[i]='\0';
-                break;
+    //Initialisation des fichiers
+    FILE * f_input;
+	FILE * f_output;
+    f_input = fopen(input,"r");
+    f_output = fopen(output,"w");
+
+    //Déclaration diverse
+    char ligne[LEN_LIGNE]; //pour stocker une ligne du fichier
+    int compteur_affichage = 0; //pour afficher des messages d'information
+
+    //Lecture du dictionaire et génération des condensat
+	while(fgets(ligne,sizeof(ligne),f_input)!=NULL){
+        //Déclaration variable interne pour chaque ligne
+        const char * separateur = "\n";
+        int taille =0;
+        int algo = 0;
+
+        if(ligne[0]!='\n'){
+            char * strToken = strtok(ligne, separateur);
+            if (strcmp(algorithm, "sha256") == 0) {
+                taille = SHA256_DIGEST_LENGTH;
+                algo = 0;
+            }else if(strcmp(algorithm, "md5")==0){
+                taille = MD5_DIGEST_LENGTH;
+                algo = 1;
+            }else if(strcmp(algorithm, "sha1")==0){
+                taille = SHA_DIGEST_LENGTH;
+                algo = 2;
             }
-            compteur++;
-        }
-        int *taille = malloc(sizeof(int));
-        unsigned char *hash = hachage(algorithm,ligne,compteur,taille);
-        if (hash) {
-            for (int i = 0; i < *taille; i++) {
-                fprintf(fp2, "%02x", hash[i]);
-             }
-        }
-        free(hash);
-        free(taille);
-        fprintf(fp2,":%s",ligne);
-        fprintf(fp2,"\n");
-        compteur_affichage ++;
-        if(compteur_affichage%1000==0){
-            printf("INFO %d hashes written...\n",compteur_affichage);
+            unsigned char hash[taille];
+            switch(algo){
+                case 1 : 
+                    MD5((const unsigned char *)strToken, strlen(strToken), hash);
+                    break;
+                case 2 :
+                    SHA1((const unsigned char *)strToken, strlen(strToken), hash);
+                    break;
+                case 0 :
+                default :
+                    SHA256((const unsigned char *)strToken, strlen(strToken), hash);
+                    break;
+            }
+            for (int i = 0; i < taille; i++) {
+                fprintf(f_output, "%02x", hash[i]);
+            }
+            fprintf(f_output,":%s",strToken);
+            fprintf(f_output,"\n");
+            compteur_affichage ++;
+            if(compteur_affichage%10000==0){
+                printf("INFO %d hashes written...\n",compteur_affichage);
+            }
         }
     }
     printf("INFO Total of hashes written : %d\n",compteur_affichage);
-	fclose(fp);
-    fclose(fp2);
+	fclose(f_input);
+    fclose(f_output);
 }
 

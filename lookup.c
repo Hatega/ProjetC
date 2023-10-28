@@ -12,7 +12,9 @@
 #define LEN_LIGNE 100
 
 
+
 void lookup(char input[]){
+    
     Hash_list * liste_hash = NULL;
     char ligne[LEN_LIGNE];
     while(fgets(ligne,sizeof(ligne),stdin)!=NULL){
@@ -24,7 +26,6 @@ void lookup(char input[]){
         }
         liste_hash = creer_avant_hash(liste_hash,ligne);
     }
-    afficher_liste_hash(liste_hash);
 
 	FILE * fp;
     fp = fopen(input,"r");
@@ -59,21 +60,33 @@ void lookup(char input[]){
             printf("INFO Loading %d hashes...\n",compteur_affichage);
         }
 	}
+    fclose(fp);
+    printf("INFO %d hashes loaded.\n",compteur_affichage);
 
     Hash_list * hash_chercher = liste_hash;
-
-	while(liste_condensat!=NULL){
+    Condensat * condensat_parser = liste_condensat;
+	while(condensat_parser!=NULL && liste_hash!=NULL){
+        int position = 1;
         while(hash_chercher!=NULL){
-            if(strcmp(liste_condensat->hash,hash_chercher->val)==0){
-                printf("MATCH %s %s\n",liste_condensat->hash,liste_condensat->mot);
+            if(strcmp(condensat_parser->hash,hash_chercher->val)==0){
+                printf("MATCH %s %s\n",condensat_parser->hash,condensat_parser->mot);
+                liste_hash = supprimer_hash(liste_hash,position);
+                position --;
             }
             hash_chercher=hash_chercher->next;
+            position ++;
         }
         hash_chercher = liste_hash;
-        liste_condensat=liste_condensat->next;
+        condensat_parser=condensat_parser->next;
 
-	}    
+	}
 
-    destruct_hash(liste_hash);
+
+    hash_chercher = liste_hash;
+    while(hash_chercher!=NULL){
+        printf("NO MATCH found for hash : %s\n",hash_chercher->val);
+        hash_chercher=hash_chercher->next;
+    }
     destruct_condensat(liste_condensat);
+    destruct_hash(liste_hash);
 }

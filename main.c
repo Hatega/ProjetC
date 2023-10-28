@@ -16,6 +16,8 @@ int main(int argc, char *argv[]){
             mode = 0;
         }else if(strcmp(argv[i],"-L")==0){
             mode = 1;
+        }else if(strcmp(argv[i],"-GL")==0){
+            mode = 2;
         }else if(strcmp(argv[i],"-i")==0){
             input = i + 1;
             i++;
@@ -38,6 +40,14 @@ int main(int argc, char *argv[]){
             break;
         case 1:
             lookup(argv[input]);
+            break;
+        case 2: 
+            if(algo!=-1){
+                generate(argv[input],argv[output],argv[algo]);
+            }else{
+                generate(argv[input],argv[output],"sha256");
+            }
+            lookup(argv[output]);
             break;
     }
 

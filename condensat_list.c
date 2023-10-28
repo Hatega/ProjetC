@@ -72,6 +72,8 @@ Condensat * supprimer_condensat(Condensat *p, int N){
 		Condensat *avant = pointeur_N_condensat(p,N-1);
 		Condensat *s = pointeur_N_condensat(p,N);
 		avant->next = s->next;
+		//free(s->hash);
+		//free(s->mot);
 		free(s);
 	}
 	return p;
@@ -86,17 +88,9 @@ void destruct_condensat(Condensat *p){
 
 /*int main(){
 
-	int longueur = 5;
-
 	Condensat * p = NULL;
-	p=creer_avant_condensat(p,0);
-
-	for(int i=2;i<10;i++){
-		p = creer_apres(p,i);
-	}
-
-
-	p=supprimer_condensat(p,1);
+	p=creer_avant_condensat(p,"sjsqj","shsq");
+	p=creer_avant_condensat(p,"sjsqzaj","shsqzz");
 
 	afficher_liste_condensat(p);
 
