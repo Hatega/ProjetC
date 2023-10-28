@@ -18,11 +18,11 @@ Le mode generate lit un fichier [Fichier_Input] ligne par ligne et écrit dans u
 Le mode generate peut donc prendre jusqu'à 3 arguments différents dans n'importe quel ordre.
 
 _Commande generate:_ ./projetc -G -i [Fichier_Input] -o [Fichier_Output] -a [Algorithme_Hachage] 
-_
+
     **Argument -i :** Permet de donner le nom/chemin du fichier dictionnaire à utiliser pour généré les différents condensats. 
-_
+
     **Argument -o :** Permet de donner le nom/chemin du fichier de sortie où sera écrit tout les condensat générés.
-_
+
     **Argument -a :** (Optionel) Permet de donner l'algorithme de hachage à utiliser parmi : sha256, sha1 et md5. Par défaut : sha256.
 
 ### Lookup
@@ -33,7 +33,7 @@ Pour la saisie de hash à trouver :
 Le mode lookup prend un seul argument.
 
 _Commande lookup:_ ./projetc -L -i [Fichier_Input]
-_
+
     **Argument -i :** Permet de donner le nom/chemin du fichier condensat qui sera utilisé comme base de donnée pour la recherche de hash
 
 ### Generate + Lookup 
