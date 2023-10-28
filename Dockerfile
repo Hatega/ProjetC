@@ -1,17 +1,17 @@
-# Utilisation de l'image de base pour C/C++
-FROM gcc:latest
+# Utilisez une image Ubuntu de base
+FROM ubuntu:latest
 
-# Installation de libssl-dev
-RUN apt-get update && apt-get install -y libssl-dev
+# Mettez à jour et installez les dépendances nécessaires
+RUN apt-get update && apt-get install -y gcc make libssl-dev
 
-# Création d'un répertoire de travail
+# Copiez le contenu du répertoire src de votre projet dans le conteneur
+COPY ./src /app
+
+# Définissez le répertoire de travail
 WORKDIR /app
 
-# Copie de votre code source dans le conteneur
-COPY . /app
-
-# Compilation du projet avec make
+# Compilez votre code C
 RUN make
 
-# Commande par défaut pour exécuter votre application (à personnaliser)
-CMD ["./projetc"]
+# Commande par défaut à exécuter lorsque le conteneur est lancé
+CMD ["/bin/bash"]
