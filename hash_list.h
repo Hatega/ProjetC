@@ -6,12 +6,6 @@ typedef struct hash_list {
     struct hash_list *next;
 } Hash_list;
 
-void afficher_hash(Hash_list *p);
-
-void afficher_liste_hash(Hash_list *p);
-
-void afficher_N_hash(Hash_list *p, int N);
-
 Hash_list *create_Hash_list(char value[]);
 
 int taille_hash(Hash_list *p);

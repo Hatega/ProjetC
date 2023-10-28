@@ -2,7 +2,7 @@ CC = gcc
 CFLAGS = -Wall
 SRC = main.c generate.c lookup.c hash_list.c condensat_list.c
 OBJ = $(SRC:.c=.o)
-EXECUTABLE = myprogram
+EXECUTABLE = projetc
 
 all: $(EXECUTABLE)
 

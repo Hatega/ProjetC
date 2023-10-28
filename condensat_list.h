@@ -7,12 +7,6 @@ typedef struct condensat {
     struct condensat *next;
 } Condensat;
 
-void afficher_condensat(Condensat *p);
-
-void afficher_liste_condensat(Condensat *p);
-
-void afficher_N_condensat(Condensat *p, int N);
-
 Condensat *create_Condensat(char hash[], char mot[]);
 
 int taille_condensat(Condensat *p);

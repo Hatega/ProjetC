@@ -1,33 +1,13 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+
+//Bibliothèque personnelle
 #include "condensat_list.h"
 
+//Méthode Liste Chainée des Condensats
 
-
-void afficher_condensat(Condensat *p){
-	printf("-----%p--------\n", p);
-	printf("Hash : %s\n",p->hash);
-	printf("Mot : %s\n",p->mot);
-	printf("next : %p\n",p->next);
-	printf("--------------\n");
-}
-void afficher_liste_condensat(Condensat *p){
-	while(p!=NULL){
-		afficher_condensat(p);
-		p = p->next;
-		printf("|\n");
-		printf("v\n");
-	}
-}
-
-void afficher_N_condensat(Condensat *p,int N){
-	for(int i=0;i<N;i++){
-		p = p->next;
-	}
-	afficher_condensat(p);
-}
-
+//Création d'un noeud
 Condensat * create_Condensat(char hash[], char mot[]){
 	Condensat *n = malloc(sizeof(Condensat));
 	strcpy(n->hash,hash);
@@ -36,7 +16,7 @@ Condensat * create_Condensat(char hash[], char mot[]){
 	return n;
 }
 
-
+//Récupération de la taille de la chaine
 int taille_condensat(Condensat *p){
 	int compteur = 0;
 	while(p!=NULL){
@@ -46,6 +26,7 @@ int taille_condensat(Condensat *p){
 	return compteur;
 }
 
+//Récupération de l'élément N de la chaine
 Condensat * pointeur_N_condensat(Condensat *p, int N){
 	int i=0;
 	while(p!=NULL && i<N-1){
@@ -55,6 +36,7 @@ Condensat * pointeur_N_condensat(Condensat *p, int N){
 	return p;
 }
 
+//Mise en place d'un noeud au début
 Condensat * creer_avant_condensat(Condensat *p, char hash[], char mot[]){
 	Condensat *n = create_Condensat(hash,mot);
 	n->next = p;
@@ -62,10 +44,13 @@ Condensat * creer_avant_condensat(Condensat *p, char hash[], char mot[]){
 	return p;
 }
 
+//Suppression d'un noeud
 Condensat * supprimer_condensat(Condensat *p, int N){
 	if(N==1){
 		Condensat *s = p;
 		p=p->next;
+		//free(s->hash);
+		//free(s->mot);
 		free(s);
 
 	}else{
@@ -80,22 +65,11 @@ Condensat * supprimer_condensat(Condensat *p, int N){
 	
 }
 
+//Suppression de la liste chainé
 void destruct_condensat(Condensat *p){
 	for(int i=taille_condensat(p);i>0;i--){
 		supprimer_condensat(p,i);
 	}
 }
-
-/*int main(){
-
-	Condensat * p = NULL;
-	p=creer_avant_condensat(p,"sjsqj","shsq");
-	p=creer_avant_condensat(p,"sjsqzaj","shsqzz");
-
-	afficher_liste_condensat(p);
-
-	destruct_condensat(p);
-	return 0;
-}*/
 
 

@@ -1,32 +1,13 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+
+//Bibliothèque personnelle
 #include "hash_list.h"
 
+//Méthode Liste Chainée des Hash à trouver
 
-
-void afficher_hash(Hash_list *p){
-	//printf("-----%p--------\n", p);
-	printf("Val : %s\n",p->val);
-	//printf("next : %p\n",p->next);
-	printf("--------------\n");
-}
-void afficher_liste_hash(Hash_list *p){
-	while(p!=NULL){
-		afficher_hash(p);
-		p = p->next;
-		printf("|\n");
-		printf("v\n");
-	}
-}
-
-void afficher_N_hash(Hash_list *p,int N){
-	for(int i=0;i<N;i++){
-		p = p->next;
-	}
-	afficher_hash(p);
-}
-
+//Création d'un noeud
 Hash_list * create_Hash_list(char value[]){
 	Hash_list *n = malloc(sizeof(Hash_list));
 	strcpy(n->val,value);
@@ -34,7 +15,7 @@ Hash_list * create_Hash_list(char value[]){
 	return n;
 }
 
-
+//Récupération de la taille de la chaine
 int taille_hash(Hash_list *p){
 	int compteur = 0;
 	while(p!=NULL){
@@ -44,6 +25,7 @@ int taille_hash(Hash_list *p){
 	return compteur;
 }
 
+//Récupération de l'élément N de la chaine
 Hash_list * pointeur_N_hash(Hash_list *p, int N){
 	int i=0;
 	while(p!=NULL && i<N-1){
@@ -53,6 +35,7 @@ Hash_list * pointeur_N_hash(Hash_list *p, int N){
 	return p;
 }
 
+//Mise en place d'un noeud au début
 struct hash_list * creer_avant_hash(Hash_list *p, char Value[]){
 	Hash_list *n = create_Hash_list(Value);
 	n->next = p;
@@ -60,6 +43,7 @@ struct hash_list * creer_avant_hash(Hash_list *p, char Value[]){
 	return p;
 }
 
+//Suppression d'un noeud
 Hash_list * supprimer_hash(Hash_list *p, int N){
 	if(N==1){
 		Hash_list *s = p;
@@ -78,22 +62,10 @@ Hash_list * supprimer_hash(Hash_list *p, int N){
 	
 }
 
+//Suppression de la liste chainé
 void destruct_hash(Hash_list *p){
 	for(int i=taille_hash(p);i>0;i--){
 		supprimer_hash(p,i);
 	}
 }
-
-/*int main(){
-
-	Hash_list * p = NULL;
-	p=creer_avant_hash(p,"kec");
-	p=creer_avant_hash(p,"zhqJ");
-
-	afficher_liste_hash(p);
-
-	destruct_hash(p);
-	return 0;
-}*/
-
 
