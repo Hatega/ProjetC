@@ -1,63 +1,121 @@
 # Projet C : Casseur de mot de passe
 
-## Pré-Requis
-OpenSSL est utilisé, il doit donc avoir les librairies nécessaire avant la compilation
+## Docker
+Assurez-vous d'avoir Docker installé sur votre machine.
 
-_Commande d'installation:_ sudo apt install libssl-dev
+Téléchargez le contenu de ce dépôt sur votre machine. Le Dockerfile se situe à la racine.
 
-## Compilation
-Un MAKEFILE est présent, il faut donc se placer dans le répertoire contenant le projet et faire la commande make.
+Ouvrez un terminal dans le répertoire où se trouve le dépôt téléchargé. Ajoutez dans le répertoire src les différents fichiers que vous voudrez utiliser par la suite (fichier de dictionnaire/condensat, fichier de hash à trouver). Ensuite, exécutez la commande suivante pour construire l'image Docker :
 
-_Commande de compilation:_ make
+```shell
+sudo docker build -t mon_image .
+```
+
+Cette commande crée une image Docker nommée "mon_image" à partir du Dockerfile.
+
+Après avoir construit l'image, exécutez-la avec la commande suivante :
+
+```shell
+sudo docker run -it mon_image
+```
+
+Vous serez connecté à un terminal interactif dans l'image Docker.
+
+À l'intérieur du terminal Docker, vous pouvez utiliser le projet comme normal. Il est déjà compilé, vous pouvez donc exécuter les commandes spécifiques du projet (voir partie Utilisation), par exemple :
+
+```shell
+./project -G -i fichier.txt -o fichier_result.txt -a md5
+```
+
+Pour quitter le terminal Docker et revenir à votre système local, tapez simplement :
+
+```shell
+exit
+```
+## Sans Docker
+### Instalation de libraire
+Le projet utilise OpenSSL, il est donc nécessaire d'installer les bibliothèques requises avant de procéder à la compilation.
+
+_Commande d'installation :_ 
+```shell
+sudo apt install libssl-dev
+```
+
+### Compilation
+Un fichier MAKEFILE est fourni pour simplifier le processus de compilation. Assurez-vous d'être dans le répertoire contenant le projet et exécutez la commande suivante pour compiler le programme.
+
+_Commande de compilation :_ 
+```shell
+make
+```
 
 ## Utilisation
-Le projet contient 3 mode d'utilisation generate, lookup et les deux précedent combiné.
+Le projet propose trois modes d'utilisation : "generate," "lookup," et une combinaison des deux.
 
 ### Generate
-Le mode generate lit un fichier [Fichier_Input] ligne par ligne et écrit dans un autre fichier [Fichier_Output] le hash de chaque ligne et la ligne correspondante. Il est possible de choisir l'algorithme de hachage. 
-Le mode generate peut donc prendre jusqu'à 3 arguments différents dans n'importe quel ordre.
+Le mode "generate" lit un fichier d'entrée ([Fichier_Input]) ligne par ligne et écrit le hachage de chaque ligne ainsi que la ligne correspondante dans un autre fichier ([Fichier_Output]). Vous pouvez choisir l'algorithme de hachage à utiliser.
 
-_Commande generate:_ ./projetc -G -i [Fichier_Input] -o [Fichier_Output] -a [Algorithme_Hachage] 
+Le mode "generate" accepte jusqu'à trois arguments différents, dans n'importe quel ordre.
 
-**Argument -i :** Permet de donner le nom/chemin du fichier dictionnaire à utiliser pour généré les différents condensats. 
+_Commande "generate" :_ 
+```shell
+./projetC -G -i [Fichier_Input] -o [Fichier_Output] -a [Algorithme_Hachage]
+```
 
-**Argument -o :** Permet de donner le nom/chemin du fichier de sortie où sera écrit tout les condensat générés.
-
-**Argument -a :** (Optionel) Permet de donner l'algorithme de hachage à utiliser parmi : sha256, sha1 et md5. Par défaut : sha256.
+- Argument `-i` : Permet de spécifier le nom/chemin du fichier dictionnaire à utiliser pour générer les différents condensats.
+- Argument `-o` : Permet de spécifier le nom/chemin du fichier de sortie où tous les condensats générés seront écrits.
+- Argument `-a` : (Optionnel) Permet de spécifier l'algorithme de hachage à utiliser parmi : sha256, sha1 et md5. Par défaut, l'algorithme est sha256.
 
 ### Lookup
-Le mode lookup lit un fichier [Fichie_Input] de condensat passé en argument et récupère également une liste de hash à trouver en STDIN. 
-Pour la saisie de hash à trouver :
- - écrire les hashs à trouver séparer par des retours à la ligne
- - une fois fini faire Ctrl + D pour sortir de la saisie 
-Le mode lookup prend un seul argument.
+Le mode "lookup" lit un fichier d'entrée ([Fichier_Input]) contenant des condensats en tant que base de données et récupère une liste de hachages à rechercher depuis l'entrée standard (STDIN). Pour entrer les hachages à rechercher :
 
-_Commande lookup:_ ./projetc -L -i [Fichier_Input]
+- Écrivez les hachages à rechercher, en les séparant par des retours à la ligne.
+- Une fois que vous avez terminé, appuyez sur Ctrl + D pour terminer la saisie.
 
-**Argument -i :** Permet de donner le nom/chemin du fichier condensat qui sera utilisé comme base de donnée pour la recherche de hash
+Le mode "lookup" prend un seul argument.
 
-### Generate + Lookup 
-Le mode generate+lookup, enchaine le mode generate et lookup. Ainsi ce mode prend les mêmes arguments que le mode G et le fichier généré par ce mode est directement utilisé en tant que fichier d'input du mode lookup. 
-Le mode generate+lookup peut prendre jusqu'à 3 arguments différents (les mêmes que le mode generate). Et prend une saisie sur STDIN comme le mode lookup (pour arreté la saisie: Ctrl+D).
+_Commande "lookup" :_ 
+```shell
+./projetC -L -i [Fichier_Input]
+```
 
-_Commande generate+lookup:_ ./projetc -GL -i [Fichier_Input] -o [Fichier_Output] -a [Algorithme_Hachage] 
+- Argument `-i` : Permet de spécifier le nom/chemin du fichier contenant les condensats qui serviront de base de données pour la recherche de hachages.
+
+### Generate + Lookup
+Le mode "generate+lookup" enchaîne le mode "generate" suivi du mode "lookup." Ce mode accepte les mêmes arguments que le mode "generate" pour la génération des condensats. Le fichier généré par le mode "generate" est utilisé directement en tant que fichier d'entrée pour le mode "lookup." Le mode "generate+lookup" peut également prendre une saisie sur STDIN (pour arrêter la saisie : Ctrl+D).
+
+_Commande "generate+lookup" :_ 
+```shell
+./projetC -GL -i [Fichier_Input] -o [Fichier_Output] -a [Algorithme_Hachage]
+```
 
 ## Résumé des commandes
 
+Docker : 
+
+```shell
+sudo docker build -t mon_image .
+sudo docker run -it mon_image
+```
+
+Sans Docker :
+
+```shell
 sudo apt install libssl-dev
-
 make
+```
 
-./projetc -G -i dictinnaire.txt -o condensat.txt  -a md5
+Pour utiliser le mode "generate" :
+```shell
+./projetC -G -i dictionnaire.txt -o condensat.txt -a md5
+```
 
-./projetc -L -i condensat.txt
+Pour utiliser le mode "lookup" :
+```shell
+./projetC -L -i condensat.txt
+```
 
-f02368945726d5fc2a14eb576f7276c0
-
-[Ctrl+D]
-
-./projetc -GL -i dictinnaire.txt -o condensat.txt  -a md5
-
-f02368945726d5fc2a14eb576f7276c0
-
-[Ctrl+D]
+Pour utiliser le mode "generate+lookup" :
+```shell
+./projetC -GL -i dictionnaire.txt -o condensat.txt -a md5
+```
