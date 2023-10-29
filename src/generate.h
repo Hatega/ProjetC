@@ -3,7 +3,5 @@
 
 void generate(char[],char[],char[]);
 
-unsigned char *hachage(char[], char[], int, int *);
-
 
 #endif
